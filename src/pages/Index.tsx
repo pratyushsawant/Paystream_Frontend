@@ -90,7 +90,8 @@ export default function Index() {
     setSteps([]); setFinalReport(""); setRefundAmount(0);
     setRefundTxId(""); setErrorMsg(""); setPhase("running"); setActiveTab("report");
 
-    const url = `http://localhost:3001/api/run?task=${encodeURIComponent(taskToRun)}&budget=${budget}`;
+    const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://paystream-backend-x8y9.onrender.com' : 'http://localhost:3001');
+    const url = `${API_BASE}/api/run?task=${encodeURIComponent(taskToRun)}&budget=${budget}`;
     const es = new EventSource(url);
 
     es.onmessage = (e) => {
@@ -111,7 +112,7 @@ export default function Index() {
     };
 
     es.onerror = () => {
-      setErrorMsg("Could not connect to PayStream server. Make sure the backend is running on port 3001.");
+      setErrorMsg("Could not connect to PayStream server. Please try again later.");
       setPhase("idle"); es.close();
     };
   };

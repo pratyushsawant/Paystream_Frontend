@@ -59,7 +59,8 @@ const ShareReport = () => {
 
   useEffect(() => {
     if (!shareId) { setError('No report ID provided.'); setLoading(false); return; }
-    fetch('http://localhost:3001/api/report/' + shareId)
+    const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://paystream-backend-x8y9.onrender.com' : 'http://localhost:3001');
+    fetch(API_BASE + '/api/report/' + shareId)
       .then((r) => {
         if (!r.ok) throw new Error(r.status === 404 ? 'Report not found or expired.' : 'Failed to load report.');
         return r.json();

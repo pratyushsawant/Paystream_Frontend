@@ -182,7 +182,8 @@ const Analysis = () => {
     setRemainingBudget(budget);
     setPhase('fetching');
 
-    const apiUrl = 'http://localhost:3001/api/analyze?repo=' + encodeURIComponent(url) + '&budget=' + budget;
+    const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://paystream-backend-x8y9.onrender.com' : 'http://localhost:3001');
+    const apiUrl = API_BASE + '/api/analyze?repo=' + encodeURIComponent(url) + '&budget=' + budget;
     const es = new EventSource(apiUrl);
 
     es.onmessage = (e) => {
@@ -245,7 +246,7 @@ const Analysis = () => {
     };
 
     es.onerror = () => {
-      setErrorMsg('Could not connect to PayStream server. Make sure node server.js is running on port 3001.');
+      setErrorMsg('Could not connect to PayStream server. Please try again later.');
       setPhase('idle');
       es.close();
     };
